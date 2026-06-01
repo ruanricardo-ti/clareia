@@ -3,7 +3,8 @@
 **Traduza documentos burocráticos em linguagem simples**
 
 [![GitHub Pages](https://img.shields.io/badge/🌐-Site%20Online-0d9488?style=flat-square)](https://ruanricardo-ti.github.io/clareia/)
-[![License](https://img.shields.io/badge/license-MIT-0d9488?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-0d9488?style=flat-square)](LICENSE)
+[![Made with](https://img.shields.io/badge/Made%20with-❤️-0d9488?style=flat-square)](https://github.com/ruanricardo-ti/clareia)
 
 ## ✨ Sobre o Projeto
 
@@ -25,7 +26,7 @@ Com um clique, o sistema identifica termos jurídicos, bancários e de saúde, e
 
 ## 🚀 Como usar
 
-1. Acesse: **[clareia.vercel.app](https://ruanricardo-ti.github.io/clareia/)** (ou o link do seu GitHub Pages)
+1. Acesse: **[https://ruanricardo-ti.github.io/clareia/](https://ruanricardo-ti.github.io/clareia/)**
 2. Cole um texto ou tire uma foto de um documento
 3. Clique em **"Clarear Documento"**
 4. Passe o mouse nos termos amarelos para ver as explicações
