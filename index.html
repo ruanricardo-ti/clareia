@@ -17,7 +17,6 @@
         box-sizing: border-box;
       }
 
-      /* ========== PALETA DE CORES ATUALIZADA ========== */
       :root {
         --primary-dark: #064e3b;
         --primary: #0d9488;
@@ -53,7 +52,6 @@
         padding: 2rem 1.5rem;
       }
 
-      /* Header melhorado */
       .header {
         text-align: center;
         margin-bottom: 3rem;
@@ -132,7 +130,6 @@
         box-shadow: 0 2px 8px rgba(13, 148, 136, 0.2);
       }
 
-      /* Cards com novo design */
       .two-columns {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -172,7 +169,6 @@
         padding: 1.75rem;
       }
 
-      /* Tabs estilizadas */
       .tabs {
         display: flex;
         gap: 0.75rem;
@@ -236,7 +232,6 @@
         background: white;
       }
 
-      /* Botões modernos */
       .btn {
         padding: 0.7rem 1.5rem;
         border-radius: var(--border-radius-btn);
@@ -270,7 +265,6 @@
         transform: translateY(-1px);
       }
 
-      /* Área de resultado com novo visual */
       .result-toolbar {
         display: flex;
         gap: 0.6rem;
@@ -328,7 +322,6 @@
         display: inline-block;
       }
 
-      /* Footer */
       .footer {
         margin-top: 2.5rem;
         text-align: center;
@@ -442,9 +435,8 @@
     </div>
 
     <script>
-      // ========== GLOSSÁRIO COMPLETO (MAIS TERMOS) ==========
+      // GLOSSÁRIO COMPLETO
       const glossary = {
-        // Termos jurídicos/contratuais
         "vigência": "📅 período de validade ou duração",
         "rescindido": "❌ cancelado antes do prazo",
         "rescindir": "❌ cancelar antes do prazo",
@@ -473,16 +465,12 @@
         "adimplemento": "✅ cumprimento de uma obrigação",
         "afastamento": "🚫 suspensão temporária",
         "amortização": "📉 pagamento parcelado de uma dívida",
-        
-        // Termos de saúde
         "carência": "⏳ período inicial sem cobertura",
         "franquia": "💲 valor que você paga antes do seguro cobrir",
         "coparticipação": "📊 você paga uma parte, plano paga o resto",
         "procedimento": "🏥 exame ou cirurgia",
         "elegibilidade": "✅ quando você atende os requisitos",
         "cobertura": "🛡️ o que o plano de saúde paga",
-        
-        // Termos bancários/financeiros
         "faturamento": "💰 valor total das vendas",
         "lucro líquido": "📊 ganho real após despesas",
         "margem": "📈 diferença percentual",
@@ -492,16 +480,12 @@
         "débito": "💸 valor que você deve",
         "juros": "📈 taxa paga por empréstimo",
         "taxa": "🏷️ percentual cobrado por serviço",
-        
-        // Termos trabalhistas
         "rescisão": "❌ término do contrato de trabalho",
         "aviso prévio": "📢 comunicação antecipada de saída",
         "FGTS": "🏦 Fundo de Garantia - poupança do trabalhador",
         "INSS": "🏛️ Instituto Nacional do Seguro Social",
         "décimo terceiro": "🎁 salário extra no fim do ano",
         "horas extras": "⏰ horas trabalhadas além do expediente",
-        
-        // Termos comuns
         "ratio": "📊 proporção ou relação entre números",
         "benchmark": "🎯 referência para comparação",
         "compliance": "✅ conjunto de regras a seguir",
@@ -510,10 +494,11 @@
         "sanção": "⚠️ penalidade ou punição"
       };
 
-      // ========== FUNÇÕES DE VOZ ==========
+      // FUNÇÕES DE VOZ
       let speechSynthesis = window.speechSynthesis;
       let currentUtterance = null;
       let isPlaying = false;
+      let currentSpeakingText = '';
 
       function speakText(text, rate = 1) {
         stopSpeaking();
@@ -521,6 +506,7 @@
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = text;
         const plainText = tempDiv.textContent || tempDiv.innerText || text;
+        currentSpeakingText = plainText;
         currentUtterance = new SpeechSynthesisUtterance(plainText);
         currentUtterance.lang = 'pt-BR';
         currentUtterance.rate = rate;
@@ -568,7 +554,7 @@
         }
       }
 
-      // ========== CLAREAR TEXTO ==========
+      // FUNÇÃO PARA CLAREAR TEXTO (CORRIGIDA)
       function clarifyText(text) {
         if (!text || !text.trim()) return "<p style='color:#94a3b8'>⚠️ Nenhum documento inserido.</p>";
         let result = text;
@@ -583,7 +569,7 @@
         return `<p>📌 <strong>Versão simplificada:</strong> Clique ou passe o mouse nos termos <span style="background:#fef08a">amarelos</span>.</p><hr style="margin:0.75rem 0; border-color:#e2e8f0">${result}`;
       }
 
-      // ========== TOOLTIPS ==========
+      // TOOLTIPS
       let activeTooltip = null;
       function setupTooltips() {
         document.querySelectorAll('.highlight-term').forEach(term => {
@@ -595,6 +581,7 @@
           term.addEventListener('click', showTooltipOnTouch);
         });
       }
+      
       function showTooltip(e) {
         if (activeTooltip) activeTooltip.remove();
         const explanation = e.target.getAttribute('data-explanation');
@@ -610,20 +597,25 @@
         activeTooltip = tooltip;
         setTimeout(() => { if(activeTooltip){ activeTooltip.remove(); activeTooltip=null; } }, 3000);
       }
+      
       function showTooltipOnTouch(e) { e.preventDefault(); showTooltip(e); }
       function hideTooltip() { if(activeTooltip){ activeTooltip.remove(); activeTooltip=null; } }
 
       let currentPlainText = '';
+      
       function displayResult(text) {
         currentPlainText = text;
-        document.getElementById('resultArea').innerHTML = clarifyText(text);
+        const resultHTML = clarifyText(text);
+        document.getElementById('resultArea').innerHTML = resultHTML;
         setupTooltips();
       }
+      
       function getPlainTextFromResult() {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = document.getElementById('resultArea').innerHTML;
         return tempDiv.textContent || tempDiv.innerText || currentPlainText;
       }
+      
       function showToast(msg) {
         const toast = document.createElement('div');
         toast.textContent = msg;
@@ -632,7 +624,7 @@
         setTimeout(() => toast.remove(), 3000);
       }
 
-      // ========== DOWNLOADS ==========
+      // DOWNLOADS
       function downloadAsTxt() {
         const text = getPlainTextFromResult();
         if(!text || text.includes('Nenhum')){ showToast('📄 Nada para baixar'); return; }
@@ -644,6 +636,7 @@
         URL.revokeObjectURL(link.href);
         showToast('📄 TXT baixado!');
       }
+      
       async function downloadAsPdf() {
         const text = getPlainTextFromResult();
         if(!text || text.includes('Nenhum')){ showToast('📄 Nada para baixar'); return; }
@@ -655,13 +648,14 @@
         try { await html2pdf().set({margin:[0.5,0.5,0.5,0.5], filename:`clareia_${new Date().toISOString().slice(0,19)}.pdf`, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2}, jsPDF:{unit:'in',format:'a4',orientation:'portrait'}}).from(element).save(); showToast('📑 PDF baixado!'); } catch(err){ showToast('❌ Erro ao gerar PDF'); }
         document.body.removeChild(element);
       }
+      
       async function copyResult() {
         const text = getPlainTextFromResult();
         if(!text || text.includes('Nenhum')){ showToast('📄 Nada para copiar'); return; }
         try { await navigator.clipboard.writeText(text); showToast('📋 Copiado!'); } catch(err){ showToast('❌ Erro ao copiar'); }
       }
 
-      // ========== OCR ==========
+      // OCR FUNCTIONS - CORRIGIDAS
       async function recognizeImage(file, enhance=false) {
         const progressDiv = document.getElementById('ocrProgress');
         const fillBar = document.getElementById('ocrFill');
@@ -669,6 +663,7 @@
         progressDiv.style.display = 'block';
         fillBar.style.width='0%';
         statusEl.innerText = enhance ? '🔧 Melhorando...' : '📖 Lendo...';
+        
         return new Promise((resolve) => {
           const reader = new FileReader();
           reader.onload = async (e) => {
@@ -679,62 +674,161 @@
                 const img = new Image();
                 img.onload = () => {
                   const canvas = document.createElement('canvas');
-                  canvas.width = img.width; canvas.height = img.height;
+                  canvas.width = img.width;
+                  canvas.height = img.height;
                   const ctx = canvas.getContext('2d');
                   ctx.drawImage(img,0,0);
-                  const data = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+                  const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+                  const data = imageData.data;
                   for(let i=0;i<data.length;i+=4){
                     let gray = 0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];
                     let val = gray>160 ? 255 : 0;
-                    data[i]=val; data[i+1]=val; data[i+2]=val;
+                    data[i]=val;
+                    data[i+1]=val;
+                    data[i+2]=val;
                   }
-                  ctx.putImageData(new ImageData(data,canvas.width,canvas.height),0,0);
+                  ctx.putImageData(imageData,0,0);
                   res(canvas.toDataURL('image/png'));
                 };
                 img.src = url;
               });
             }
             statusEl.innerText = '🔍 Reconhecendo texto...';
-            const result = await Tesseract.recognize(url, 'por', { logger: m => { if(m.status==='recognizing text'){ let p=Math.floor(m.progress*100); fillBar.style.width=`${p}%`; statusEl.innerText=`📖 Lendo... ${p}%`; } }, tessedit_pageseg_mode:6 });
-            progressDiv.style.display = 'none';
-            fillBar.style.width='0%';
-            resolve(result.data.text);
+            try {
+              const result = await Tesseract.recognize(url, 'por', { 
+                logger: m => { 
+                  if(m.status === 'recognizing text'){ 
+                    let p=Math.floor(m.progress*100); 
+                    fillBar.style.width=`${p}%`; 
+                    statusEl.innerText=`📖 Lendo... ${p}%`; 
+                  } 
+                },
+                tessedit_pageseg_mode: 6,
+                tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáàâãéèêíïóôõúçÁÀÂÃÉÈÊÍÏÓÔÕÚÇ .,;:!?()[]{}"\'/\\-=_+*&%$#@'
+              });
+              progressDiv.style.display = 'none';
+              fillBar.style.width='0%';
+              resolve(result.data.text);
+            } catch(error) {
+              console.error('Erro no OCR:', error);
+              progressDiv.style.display = 'none';
+              showToast('❌ Erro ao ler a imagem. Tente uma foto mais clara!');
+              resolve('');
+            }
           };
           reader.readAsDataURL(file);
         });
       }
+      
       async function processImage(file) {
-        if(!file || !file.type.startsWith('image/')){ showToast('❌ Selecione uma imagem'); return; }
+        if(!file || !file.type.startsWith('image/')){ 
+          showToast('❌ Selecione uma imagem válida'); 
+          return; 
+        }
+        
+        // Mostrar preview
         const reader = new FileReader();
         reader.onload = async (e) => {
           document.getElementById('imagePreview').src = e.target.result;
           document.getElementById('imagePreview').style.display = 'block';
+          
+          // Processar OCR
           const text = await recognizeImage(file, false);
-          if(text && text.trim()){ document.getElementById('documentInput').value = text; showToast('✅ Texto extraído!'); }
-          else showToast('⚠️ Não foi possível ler');
+          
+          if(text && text.trim()){ 
+            document.getElementById('documentInput').value = text; 
+            showToast('✅ Texto extraído com sucesso! Clique em "Clarear Documento"');
+            
+            // Trocar para a aba de texto para mostrar o que foi extraído
+            document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+            document.querySelector('.tab-btn[data-tab="text"]').classList.add('active');
+            document.getElementById('tab-text').classList.add('active');
+          } else { 
+            showToast('⚠️ Não foi possível ler o texto da imagem. Tente uma foto mais nítida!'); 
+          }
         };
         reader.readAsDataURL(file);
       }
 
-      // ========== EVENTOS ==========
-      document.getElementById('cameraOption').onclick = () => { let input = document.createElement('input'); input.type='file'; input.accept='image/*'; input.capture='environment'; input.onchange = e => e.target.files[0] && processImage(e.target.files[0]); input.click(); };
-      document.getElementById('galleryOption').onclick = () => { let input = document.createElement('input'); input.type='file'; input.accept='image/*'; input.onchange = e => e.target.files[0] && processImage(e.target.files[0]); input.click(); };
-      document.querySelectorAll('.tab-btn').forEach(btn => { btn.onclick = () => { document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active')); btn.classList.add('active'); document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active'); }; });
-      document.getElementById('clarifyBtn').onclick = () => { stopSpeaking(); let text = document.getElementById('documentInput').value; if(!text.trim()){ showToast('📄 Cole um texto ou tire foto'); return; } displayResult(text); };
-      document.getElementById('clearBtn').onclick = () => { stopSpeaking(); document.getElementById('documentInput').value=''; displayResult(''); document.getElementById('imagePreview').style.display='none'; document.getElementById('ocrProgress').style.display='none'; showToast('🧹 Limpo!'); };
+      // EVENTOS
+      document.getElementById('cameraOption').onclick = () => { 
+        let input = document.createElement('input'); 
+        input.type='file'; 
+        input.accept='image/*'; 
+        input.capture='environment'; 
+        input.onchange = e => e.target.files[0] && processImage(e.target.files[0]); 
+        input.click(); 
+      };
+      
+      document.getElementById('galleryOption').onclick = () => { 
+        let input = document.createElement('input'); 
+        input.type='file'; 
+        input.accept='image/*'; 
+        input.onchange = e => e.target.files[0] && processImage(e.target.files[0]); 
+        input.click(); 
+      };
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => { 
+        btn.onclick = () => { 
+          document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); 
+          document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active')); 
+          btn.classList.add('active'); 
+          document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active'); 
+        }; 
+      });
+      
+      document.getElementById('clarifyBtn').onclick = () => { 
+        stopSpeaking(); 
+        let text = document.getElementById('documentInput').value; 
+        if(!text.trim()){ 
+          showToast('📄 Cole um texto ou tire uma foto primeiro!'); 
+          return; 
+        } 
+        displayResult(text); 
+      };
+      
+      document.getElementById('clearBtn').onclick = () => { 
+        stopSpeaking(); 
+        document.getElementById('documentInput').value=''; 
+        displayResult(''); 
+        document.getElementById('imagePreview').style.display='none'; 
+        document.getElementById('ocrProgress').style.display='none'; 
+        showToast('🧹 Limpo!'); 
+      };
+      
       document.getElementById('copyResultBtn').onclick = copyResult;
       document.getElementById('downloadTxtBtn').onclick = downloadAsTxt;
       document.getElementById('downloadPdfBtn').onclick = downloadAsPdf;
-      document.getElementById('voiceBtn').onclick = () => { let c = document.getElementById('voiceControls'); c.style.display = c.style.display === 'flex' ? 'none' : 'flex'; if(c.style.display !== 'flex') stopSpeaking(); };
+      
+      document.getElementById('voiceBtn').onclick = () => { 
+        let c = document.getElementById('voiceControls'); 
+        c.style.display = c.style.display === 'flex' ? 'none' : 'flex'; 
+        if(c.style.display !== 'flex') stopSpeaking(); 
+      };
+      
       document.getElementById('playPauseBtn').onclick = togglePlayPause;
       document.getElementById('stopVoiceBtn').onclick = stopSpeaking;
-      document.getElementById('voiceSpeed').onchange = (e) => { if(currentUtterance && (speechSynthesis.speaking || speechSynthesis.paused)){ let text=currentUtterance.text; stopSpeaking(); speakText(text, parseFloat(e.target.value)); } };
-      document.getElementById('documentInput').addEventListener('keydown', (e) => { if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); document.getElementById('clarifyBtn').click(); } });
+      
+      document.getElementById('voiceSpeed').onchange = (e) => { 
+        if(currentUtterance && (speechSynthesis.speaking || speechSynthesis.paused)){ 
+          let text=currentUtterance.text; 
+          stopSpeaking(); 
+          speakText(text, parseFloat(e.target.value)); 
+        } 
+      };
+      
+      document.getElementById('documentInput').addEventListener('keydown', (e) => { 
+        if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ 
+          e.preventDefault(); 
+          document.getElementById('clarifyBtn').click(); 
+        } 
+      });
 
-      // Adiciona CSS da animação
-      const style = document.createElement('style');
-      style.textContent = '@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}} .btn-voice.playing{background:linear-gradient(135deg,#dc2626,#ef4444);animation:pulse 1.5s infinite} @keyframes pulse{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}} .image-card:hover{background:linear-gradient(135deg, rgba(13,148,136,0.05), rgba(2,132,199,0.05)); border-color:var(--primary); transform:translateY(-2px);}';
-      document.head.appendChild(style);
+      // CSS DA ANIMAÇÃO
+      const styleEl = document.createElement('style');
+      styleEl.textContent = '@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}} .btn-voice.playing{background:linear-gradient(135deg,#dc2626,#ef4444);animation:pulse 1.5s infinite} @keyframes pulse{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}} .image-card:hover{background:linear-gradient(135deg, rgba(13,148,136,0.05), rgba(2,132,199,0.05)); border-color:var(--primary); transform:translateY(-2px);}';
+      document.head.appendChild(styleEl);
     </script>
   </body>
 </html>
